@@ -23,12 +23,12 @@ beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
 
   // Use one of those accounts to deply the contract
-  inbox = await new web3.eth.Contract(JSON.parse(interface))
+  inbox = await new web3.eth.Contract(JSON.parse(interface)) //teaches web3 about what methods an Inbox contract has
     .deploy({
       data: bytecode,
       arguments: ["Hi there!"],
-    })
-    .send({ from: accounts[0], gas: "1000000" });
+    }) //tells web3 that we want to deploy a new copy of this contract
+    .send({ from: accounts[0], gas: "1000000" }); //Instructs web3 to send out a transaction that creates this contract
 });
 
 describe("Inbox", () => {
