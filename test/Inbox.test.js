@@ -17,6 +17,7 @@ const { interface, bytecode } = require("../compile");
 
 let accounts;
 let inbox;
+const INITIAL_STRING = "Hi there!";
 
 beforeEach(async () => {
   // Get a list of all accounts (provided by ganache)
@@ -26,7 +27,7 @@ beforeEach(async () => {
   inbox = await new web3.eth.Contract(JSON.parse(interface)) //teaches web3 about what methods an Inbox contract has
     .deploy({
       data: bytecode,
-      arguments: ["Hi there!"],
+      arguments: [INITIAL_STRING],
     }) //tells web3 that we want to deploy a new copy of this contract
     .send({ from: accounts[0], gas: "1000000" }); //Instructs web3 to send out a transaction that creates this contract
 });
@@ -34,5 +35,10 @@ beforeEach(async () => {
 describe("Inbox", () => {
   it("deploys a contract", () => {
     assert.ok(inbox.options.address);
+  });
+
+  it("has a default message", async () => {
+    const message = await inbox.methods.message().call();
+    assert.equal(message, INITIAL_STRING);
   });
 });
