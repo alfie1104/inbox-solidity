@@ -6,7 +6,7 @@ const Web3 = require("web3"); //Constructor of Web3
 //Web3 is always expecting the provider is provided
 //provider : communication layer. By change provider, we can choice which blockchain network will be used
 const web3 = new Web3(ganache.provider()); //instance of web3
-const { interface, bytecode } = require("../compile");
+const { abi, evm } = require("../compile");
 
 /*
  Mocha Functions
@@ -24,9 +24,9 @@ beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
 
   // Use one of those accounts to deply the contract
-  inbox = await new web3.eth.Contract(JSON.parse(interface)) //teaches web3 about what methods an Inbox contract has
+  inbox = await new web3.eth.Contract(abi) //teaches web3 about what methods an Inbox contract has
     .deploy({
-      data: bytecode,
+      data: evm.bytecode.object,
       arguments: [INITIAL_STRING],
     }) //tells web3 that we want to deploy a new copy of this contract
     .send({ from: accounts[0], gas: "1000000" }); //Instructs web3 to send out a transaction that creates this contract
